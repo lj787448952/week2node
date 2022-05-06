@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema(
         },
         content: {
             type: String,
-            default: ""
+            required: [true, 'Content 未填寫']
         },
         image: {
             type: String,
