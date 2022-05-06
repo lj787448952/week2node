@@ -15,24 +15,13 @@ const routes = async (req, res) => {
         PostsControllers.getPosts(req, res);
     } else if (req.url === '/posts' && method == 'POST') {
         req.on('end', async ({ body, req, res }) => PostsControllers.createdPosts({ body, req, res }))
-
     } else if (req.url === '/posts' && method == 'DELETE') {
-        const posts = await Post.deleteMany({});
-        handleSuccess(res, posts);
+        PostsControllers.deletePosts(req, res);
     } else if (req.url.startsWith("/posts/") && method == 'DELETE') {
-        const id = req.url.split('/').pop();
-        const posts = await Post.findByIdAndDelete(id);
-        handleSuccess(res, posts);
+        PostsControllers.deletePost(req, res);
     } else if (req.url.startsWith("/posts/") && method == 'PATCH') {
         req.on('end', async () => {
-            try {
-                const id = req.url.split('/').pop();
-                const data = JSON.parse(body);
-                const posts = await Post.findByIdAndUpdate(id, data);
-                handleSuccess(res, posts);
-            } catch (error) {
-                errorHandle(res, error);
-            }
+            PostsControllers.updatePost({ body, req, res });
         });
     } else if (method == 'OPTIONS') {
         HttpControllers.cors(req, res);
