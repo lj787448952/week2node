@@ -8,7 +8,7 @@ const DB = process.env.DATABASE.replace(
 );
 
 mongoose.connect(DB).then(() => {
-    console.log('mongoose connect success')
+    console.log('資料庫連結成功')
 }).catch((error) => {
     console.log(error)
 })

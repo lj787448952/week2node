@@ -4,22 +4,26 @@ const errorHandle = require("../service/errorHandle");
 
 const posts = {
     async getPosts(req, res) {
-        const posts = await Post.find();
-        handleSuccess(res, posts);
+        const allPosts = await Post.find();
+        handleSuccess(res, allPosts);
     },
     async createdPosts({ body, req, res }) {
         try {
             const data = JSON.parse(body);
-            const newPost = await Post.create(
-                {
-                    name: data.name,
-                    content: data.content,
-                    image: data.image,
-                    tags: data.tags,
-                    likes: data.likes
-                }
-            )
-            handleSuccess(res, newPost);
+            if (data.content) {
+                const newPost = await Post.create(
+                    {
+                        name: data.name,
+                        content: data.content,
+                        image: data.image,
+                        tags: data.tags,
+                        likes: data.likes
+                    }
+                )
+                handleSuccess(res, newPost);
+            } else {
+                errorHandle(res);
+            }
         } catch (error) {
             errorHandle(res, error);
         }
